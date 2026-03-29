@@ -1,0 +1,42 @@
+name: Terraform CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # 2. Azure Login (👉 ADD IT HERE)
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # 3. Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # 4. Terraform Init
+      - name: Terraform Init
+        run: terraform init
+
+      # 5. Terraform Plan
+      - name: Terraform Plan
+        run: terraform plan
+
+      # 6. Terraform Apply
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+
+
+        #cf16bd19-a169-41a9-a476-78c8132739bd
+        #az ad sp create-for-rbac --name "terraform-sp" --role="Contributor" --scopes="/subscriptions/cf16bd19-a169-41a9-a476-78c8132739bd" --sdk-auth
